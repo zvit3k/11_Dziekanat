@@ -1,6 +1,7 @@
 package pawlak.witold.panels;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import pawlak.witold.classes.Settings;
 import pawlak.witold.classes.Uczelnia;
 import pawlak.witold.database.Database;
 
@@ -74,7 +76,7 @@ public class UpdatePanelU extends JPanel implements ActionListener {
 		add(panelBottom, BorderLayout.PAGE_END);
 
 		setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-
+		updateFont(Settings.fontSize);
 	}
 
 	@Override
@@ -85,11 +87,27 @@ public class UpdatePanelU extends JPanel implements ActionListener {
 			int rokZalozenia = Integer.parseInt(tfRokZalozenia.getText());
 			String nazwaRektora = tfNazwaRektora.getText();
 			Database.updateUczelnia(u.getId(), nazwa, miejscowosc, rokZalozenia, nazwaRektora);
-			((MainPanelUczelnia)panelU).fillPanelU();
+			((PanelUczelnia)panelU).fillPanelU();
+			
 		} else if (e.getSource() == btnCancel) {
 			((JFrame) this.getRootPane().getParent()).dispose();
+			
+			
 		}
-
+		
+	
 	}
-
+	public void updateFont(int newFontSize){
+		labNazwa.setFont(new Font("Times New Roman", Font.PLAIN, newFontSize));
+		tfNazwa.setFont(new Font("Times New Roman", Font.PLAIN, newFontSize));
+		labMiejscowosc.setFont(new Font("Times New Roman", Font.PLAIN, newFontSize));
+		tfMiejscowosc.setFont(new Font("Times New Roman", Font.PLAIN, newFontSize));
+		labRokZalozenia.setFont(new Font("Times New Roman", Font.PLAIN, newFontSize));
+		tfRokZalozenia.setFont(new Font("Times New Roman", Font.PLAIN, newFontSize));
+		labNazwaRektora.setFont(new Font("Times New Roman", Font.PLAIN, newFontSize));
+		tfNazwaRektora.setFont(new Font("Times New Roman", Font.PLAIN, newFontSize));
+		
+		btnUpdate.setFont(new Font("Times New Roman", Font.PLAIN, newFontSize));
+		btnCancel.setFont(new Font("Times New Roman", Font.PLAIN, newFontSize));
+	}
 }

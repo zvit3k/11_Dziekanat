@@ -4,17 +4,17 @@ import javax.swing.JFrame;
 
 import pawlak.witold.classes.Access;
 import pawlak.witold.database.Database;
-import pawlak.witold.panels.Login;
+import pawlak.witold.panels.PanelLogin;
 import pawlak.witold.panels.MainPanel;
-import pawlak.witold.panels.MainPanelUczelnia;
+import pawlak.witold.panels.PanelUczelnia;
 import pawlak.witold.panels.PanelAll;
 
 public class Main {
 
 	public static void createAndShowGui() {
-		JFrame frame = new JFrame("Panel Uczelnia");
+		JFrame frame = new JFrame("Main Panel");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setLocation(500, 200);
+		frame.setLocation(400, 40);
 		MainPanel mainPanel = new MainPanel();
 		mainPanel.setVisible(true);
 		frame.setContentPane(mainPanel);
@@ -27,7 +27,7 @@ public class Main {
 	public static void main(String[] args) {
 
 		Database.connect();
-		Database.createTables();
+		//Database.createTables();
 		
 		//Database.insertUser("Witek", "paw87", "user");
 		
@@ -57,8 +57,8 @@ public class Main {
 		//Database.insertWpis(2, 1);
 		//Database.insertWpis(1, 4);
 		//Database.insertWpis(3, 4);
-		Database.deleteUczelnia(4);
-		System.out.println(Database.selectWpis());
+		//Database.deleteUczelnia(4);
+		//System.out.println(Database.selectWpis());
 		//System.out.println(Database.selectStudent());
 		//System.out.println(Database.selectUczelnia());
 		
@@ -66,8 +66,10 @@ public class Main {
 			public void run() {
 				createAndShowGui();
 			}
-		});
+		}); 
 
+		
+		//System.out.println(Database.selectInnerJoin());
 		// for (Uczelnia u : Database.selectUczelnia()) {
 		// System.out.println(u);
 		// }

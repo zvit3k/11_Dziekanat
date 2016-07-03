@@ -16,7 +16,7 @@ import javax.swing.JTextField;
 
 import pawlak.witold.database.Database;
 
-public class Login extends JPanel implements ActionListener {
+public class PanelLogin extends JPanel implements ActionListener {
 
 	private JLabel labLogin;
 	private JTextField tfLogin;
@@ -29,7 +29,7 @@ public class Login extends JPanel implements ActionListener {
 	private JButton btnLog;
 	private JButton btnCancel;
 
-	public Login() {
+	public PanelLogin() {
 
 		super(new GridLayout(4, 2, 10, 10));
 
@@ -74,7 +74,7 @@ public class Login extends JPanel implements ActionListener {
 			JFrame frame = new JFrame("Dziekanat");
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.setLocation(500, 200);
-			MainPanelStudent main = new MainPanelStudent();
+			PanelStudent main = new PanelStudent();
 			main.setVisible(true);
 			frame.setContentPane(main);
 			frame.pack();

@@ -1,6 +1,7 @@
 package pawlak.witold.panels;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,12 +17,12 @@ import javax.swing.JTextField;
 import pawlak.witold.classes.Uczelnia;
 import pawlak.witold.database.Database;
 
-public class MainPanelUczelnia extends JPanel implements ActionListener{
+public class PanelUczelnia extends JPanel implements ActionListener {
 
 	JButton btnLeft;
 	JButton btnRight;
 	JTextField tfIndeks;
-	
+
 	JLabel labNazwa;
 	JTextField tfNazwa;
 	JLabel labMiejscowosc;
@@ -30,49 +31,52 @@ public class MainPanelUczelnia extends JPanel implements ActionListener{
 	JTextField tfRokZalozenia;
 	JLabel labNazwaRektora;
 	JTextField tfNazwaRektora;
-	
+
 	JButton btnInsert;
 	JButton btnDelete;
 	JButton btnUpdate;
-	
+
 	private List<Uczelnia> lista;
 	private int idx;
 	private boolean czyPusta;
-	
-	public MainPanelUczelnia(){
-		super(new BorderLayout(10,10));
-		JPanel panelTop = new JPanel(new GridLayout(1,3,5,5));
-		JPanel panelCenter = new JPanel(new GridLayout(4,2,5,5));
-		JPanel panelBottom = new JPanel(new GridLayout(1,3,5,5));
+
+	InsertPanelU insertPanel;
+	UpdatePanelU updatePanel;
+
+	public PanelUczelnia() {
+		super(new BorderLayout(10, 10));
+		JPanel panelTop = new JPanel(new GridLayout(1, 3, 5, 5));
+		JPanel panelCenter = new JPanel(new GridLayout(4, 2, 5, 5));
+		JPanel panelBottom = new JPanel(new GridLayout(1, 3, 5, 5));
 		btnLeft = new JButton("<<<");
 		btnLeft.addActionListener(this);
 		btnRight = new JButton(">>>");
 		btnRight.addActionListener(this);
 		tfIndeks = new JTextField(" ");
-		
+
 		labNazwa = new JLabel("Nazwa uczelni: ");
 		tfNazwa = new JTextField();
-		
+
 		labMiejscowosc = new JLabel("Miejscowosc: ");
 		tfMiejscowosc = new JTextField();
-		
+
 		labRokZalozenia = new JLabel("Rok za³o¿enia: ");
 		tfRokZalozenia = new JTextField();
-		
+
 		labNazwaRektora = new JLabel("Rektor: ");
 		tfNazwaRektora = new JTextField();
-		
+
 		btnInsert = new JButton("Insert");
 		btnInsert.addActionListener(this);
 		btnDelete = new JButton("Delete");
 		btnDelete.addActionListener(this);
 		btnUpdate = new JButton("Update");
 		btnUpdate.addActionListener(this);
-		
+
 		panelTop.add(btnLeft);
 		panelTop.add(tfIndeks);
 		panelTop.add(btnRight);
-		
+
 		panelCenter.add(labNazwa);
 		panelCenter.add(tfNazwa);
 		panelCenter.add(labMiejscowosc);
@@ -81,40 +85,44 @@ public class MainPanelUczelnia extends JPanel implements ActionListener{
 		panelCenter.add(tfRokZalozenia);
 		panelCenter.add(labNazwaRektora);
 		panelCenter.add(tfNazwaRektora);
-		
+
 		panelBottom.add(btnInsert);
 		panelBottom.add(btnDelete);
 		panelBottom.add(btnUpdate);
-		
+
 		add(panelTop, BorderLayout.PAGE_START);
 		add(panelCenter, BorderLayout.CENTER);
 		add(panelBottom, BorderLayout.PAGE_END);
-		
+
 		setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-		
+
 		lista = Database.selectUczelnia();
-		idx=0;
+		idx = 0;
 		fillPanelU();
+
+		
+		
 	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource()==btnLeft){
+		if (e.getSource() == btnLeft) {
 			lista = Database.selectUczelnia();
 			idx--;
-			if(idx<0){
-				idx = lista.size()-1;
+			if (idx < 0) {
+				idx = lista.size() - 1;
 			}
 			fillPanelU();
-			
-		} else if(e.getSource()==btnRight){
+
+		} else if (e.getSource() == btnRight) {
 			lista = Database.selectUczelnia();
 			idx++;
-			if(idx>=lista.size()){
+			if (idx >= lista.size()) {
 				idx = 0;
 			}
 			fillPanelU();
-			
-		} else if(e.getSource()==btnInsert){
+
+		} else if (e.getSource() == btnInsert) {
 			JFrame frameInsert = new JFrame("Insert");
 			frameInsert.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			frameInsert.setVisible(true);
@@ -123,34 +131,34 @@ public class MainPanelUczelnia extends JPanel implements ActionListener{
 			frameInsert.pack();
 			insertPanel.setVisible(true);
 			frameInsert.setResizable(false);
-			frameInsert.setLocation(250,200);
-			
-		} else if(e.getSource()==btnDelete){
+			frameInsert.setLocation(250, 200);
+
+		} else if (e.getSource() == btnDelete) {
 			Database.deleteUczelnia(lista.get(idx).getId());
-			idx=0;
+			idx = 0;
 			lista = Database.selectUczelnia();
 			fillPanelU();
-			if(czyPusta){
+			if (czyPusta) {
 				btnDelete.setEnabled(false);
 			}
-			
-		} else if(e.getSource()==btnUpdate){
+
+		} else if (e.getSource() == btnUpdate) {
 			JFrame frameUpdate = new JFrame("Edycja");
 			frameUpdate.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			frameUpdate.setVisible(true);
-			UpdatePanelU updatePanel = new UpdatePanelU(lista.get(idx), this);
+			UpdatePanelU updatePanel =new UpdatePanelU(lista.get(idx), this);
 			frameUpdate.setContentPane(updatePanel);
 			frameUpdate.pack();
 			updatePanel.setVisible(true);
 			frameUpdate.setResizable(false);
-			frameUpdate.setLocation(800,200);
+			frameUpdate.setLocation(800, 200);
 		}
-		
+
 	}
-	
-	public void fillPanelU(){
+
+	public void fillPanelU() {
 		lista = Database.selectUczelnia();
-		if(lista.isEmpty() || lista==null){
+		if (lista.isEmpty() || lista == null) {
 			tfIndeks.setText("");
 			tfNazwa.setText("");
 			tfMiejscowosc.setText("");
@@ -159,11 +167,35 @@ public class MainPanelUczelnia extends JPanel implements ActionListener{
 			czyPusta = true;
 			return;
 		}
-		tfIndeks.setText(lista.get(idx).getId()+"");
+		tfIndeks.setText(lista.get(idx).getId() + "");
 		tfNazwa.setText(lista.get(idx).getNazwa());
 		tfMiejscowosc.setText(lista.get(idx).getMiejscowosc());
-		tfRokZalozenia.setText(lista.get(idx).getRokZalozenia()+ "");
+		tfRokZalozenia.setText(lista.get(idx).getRokZalozenia() + "");
 		tfNazwaRektora.setText(lista.get(idx).getNazwaRektora());
+	}
+
+	public void updateFont(int newFontSize) {
+		Font newFont = new Font("Times New Roman", Font.PLAIN, newFontSize);
+		insertPanel.updateFont(newFontSize);
+		updatePanel.updateFont(newFontSize);
+		btnLeft.setFont(newFont);
+		btnRight.setFont(newFont);
+		tfIndeks.setFont(newFont);
+		labNazwa.setFont(newFont);
+		tfNazwa.setFont(newFont);
+		labMiejscowosc.setFont(newFont);
+		tfMiejscowosc.setFont(newFont);
+		labRokZalozenia.setFont(newFont);
+		tfRokZalozenia.setFont(newFont);
+		labNazwaRektora.setFont(newFont);
+		tfNazwaRektora.setFont(newFont);
+		btnInsert.setFont(newFont);
+		btnInsert.setFont(newFont);
+		btnDelete.setFont(newFont);
+		btnDelete.setFont(newFont);
+		btnUpdate.setFont(newFont);
+		btnUpdate.setFont(newFont);
+
 	}
 
 }

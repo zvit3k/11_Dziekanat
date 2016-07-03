@@ -1,6 +1,7 @@
 package pawlak.witold.classes;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Student {
@@ -10,42 +11,55 @@ public class Student {
 	private int wiek;
 	private int rokStudiow;
 	private String zdjecie;
+
 	public int getId() {
 		return id;
 	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
+
 	public String getImie() {
 		return imie;
 	}
+
 	public void setImie(String imie) {
 		this.imie = imie;
 	}
+
 	public String getNazwisko() {
 		return nazwisko;
 	}
+
 	public void setNazwisko(String nazwisko) {
 		this.nazwisko = nazwisko;
 	}
+
 	public int getWiek() {
 		return wiek;
 	}
+
 	public void setWiek(int wiek) {
 		this.wiek = wiek;
 	}
+
 	public int getRokStudiow() {
 		return rokStudiow;
 	}
+
 	public void setRokStudiow(int rokStudiow) {
 		this.rokStudiow = rokStudiow;
 	}
+
 	public String getZdjecie() {
 		return zdjecie;
 	}
+
 	public void setZdjecie(String zdjecie) {
 		this.zdjecie = zdjecie;
 	}
+
 	public Student(int id, String imie, String nazwisko, int wiek, int rokStudiow, String zdjecie) {
 		super();
 		this.id = id;
@@ -55,13 +69,16 @@ public class Student {
 		this.rokStudiow = rokStudiow;
 		this.zdjecie = zdjecie;
 	}
-	
-	public Student() {}
+
+	public Student() {
+	}
+
 	@Override
 	public String toString() {
 		return "Student [id=" + id + ", imie=" + imie + ", nazwisko=" + nazwisko + ", wiek=" + wiek + ", rokStudiow="
 				+ rokStudiow + ", zdjecie=" + zdjecie + "]";
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -74,6 +91,7 @@ public class Student {
 		result = prime * result + ((zdjecie == null) ? 0 : zdjecie.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -106,15 +124,34 @@ public class Student {
 			return false;
 		return true;
 	}
-	
-	public static List<String> getIdListFromStudentList(List<Student> lista)
-	{
+
+	public static List<String> getIdListFromStudentList(List<Student> lista) {
 		List<String> idList = new ArrayList<>();
-		for(Student s : lista)
-		{
+		for (Student s : lista) {
 			idList.add(s.getId() + "");
 		}
 		return idList;
 	}
+
+	public static List<String> getAgeListFromStudentList(List<Student> lista) {
+		List<String> ageList = new ArrayList<>();
+		for (Student s : lista) {
+			ageList.add(s.getWiek()+"");
+		}
+		Collections.sort(ageList);
+		return ageList;
+	}
+	
+	
+	public static List<String> getStudiesListFromStudentList(List<Student> lista) {
+		List<String> studiesList = new ArrayList<>();
+		for (Student s : lista) {
+			studiesList.add(s.getRokStudiow()+"");
+		}
+		Collections.sort(studiesList);
+		return studiesList;
+	}
+	
+	
 
 }

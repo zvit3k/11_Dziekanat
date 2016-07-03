@@ -12,6 +12,7 @@ import java.util.List;
 import org.sqlite.SQLiteConfig;
 
 import pawlak.witold.classes.Access;
+import pawlak.witold.classes.InnerJoin;
 import pawlak.witold.classes.Student;
 import pawlak.witold.classes.Uczelnia;
 import pawlak.witold.classes.Wpis;
@@ -26,14 +27,17 @@ public class Database {
 	public static void connect() {
 		try {
 			Class.forName(DRV); // ladujemy sterownik
-			
-			//aktywacja mechanizmu kluczy obcych
+
+			// aktywacja mechanizmu kluczy obcych
 			SQLiteConfig config = new SQLiteConfig();
 			config.enforceForeignKeys(true);
-			
-			conn = DriverManager.getConnection(DB, config.toProperties()); // baza danych DB zostanie
-													// utworzona na nowo jezeli
-													// nie istniala
+
+			conn = DriverManager.getConnection(DB, config.toProperties()); // baza
+																			// danych
+																			// DB
+																			// zostanie
+			// utworzona na nowo jezeli
+			// nie istniala
 			// lub zostanie z nia nawiazane polaczenie jezeli istniala
 			stat = conn.createStatement(); // inicjalizujemy zmienna od
 											// zarzadzania zapytaniami
@@ -53,19 +57,20 @@ public class Database {
 			String tabelaStudent = "create table if not exists Student (id integer primary key autoincrement, "
 					+ "imie varchar(50) not null, nazwisko varchar(50) not null, wiek integer not null, "
 					+ "rokStudiow integer not null, zdjecie varchar(60) not null);";
-			
+
 			String tabelaU = "create table if not exists Uczelnia (id integer primary key autoincrement, "
 					+ "nazwa varchar(30) not null, " + "miejscowosc varchar (30) not null, "
 					+ "rokZalozenia integer (5) not null, " + "nazwaRektora varchar (20) not null );";
-			
+
 			String tabelaW = "create table if not exists Wpis (id integer primary key autoincrement,"
 					+ "idStudent integer not null, idUczelnia integer not null,"
 					+ "foreign key (idStudent) references Student(id) on delete cascade on update cascade,"
 					+ "foreign key (idUczelnia) references Uczelnia(id) on delete cascade on update cascade);";
-			
+
 			String tableAccess = "create table if not exists Access " + "(id integer primary key autoincrement , "
-					+ "login varchar(20) not null, " + "password varchar(20) not null, " + "role varchar (5) not null);";
-	
+					+ "login varchar(20) not null, " + "password varchar(20) not null, "
+					+ "role varchar (5) not null);";
+
 			stat.execute(tableAccess);
 			stat.execute(tabelaU);
 			stat.execute(tabelaStudent);
@@ -275,7 +280,7 @@ public class Database {
 		}
 		return null;
 	}
-	
+
 	public static void insertWpis(int idStudent, int idUczelnia) {
 		String insertW = "insert into Wpis (idStudent, idUczelnia) values (?,?) ;";
 
@@ -289,8 +294,8 @@ public class Database {
 			e.printStackTrace();
 		}
 	}
-	
-	public static void deleteWpis(int id){
+
+	public static void deleteWpis(int id) {
 		String deleteW = "delete Wpis where id=?;";
 		try {
 			PreparedStatement ps = conn.prepareStatement(deleteW);
@@ -300,10 +305,10 @@ public class Database {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
-	
-	public static void updateWpis(int id, int idSudent, int idUczelnia){
+
+	public static void updateWpis(int id, int idSudent, int idUczelnia) {
 		String updateW = "update Wpis set idStudent=?, idUczelnia=? where id=?;";
 		try {
 			PreparedStatement ps = conn.prepareStatement(updateW);
@@ -335,4 +340,173 @@ public class Database {
 		}
 		return null;
 	}
+
+	public static List<InnerJoin> selectInnerJoin() {
+		/*
+		 * 
+		 * select * from tableA a inner join tableB b on a.common = b.common
+		 * inner join TableC c on b.common = c.common
+		 */
+
+		try {
+			String select = "select Wpis.id, Student.imie, Student.nazwisko, Student.wiek, Student.rokStudiow, "
+					+ "Uczelnia.nazwa, Uczelnia.miejscowosc, Uczelnia.rokZalozenia, Uczelnia.nazwaRektora "
+					+ "from Student inner join Wpis on Student.id=Wpis.idStudent inner join Uczelnia on "
+					+ "Wpis.idUczelnia=Uczelnia.id;";
+
+			List<InnerJoin> list = new ArrayList<>();
+			ResultSet rs = stat.executeQuery(select);
+			while (rs.next()) {
+				int id = rs.getInt(1);
+				String imie = rs.getString(2);
+				String nazwisko = rs.getString(3);
+				int wiek = rs.getInt(4);
+				int rokStudiow = rs.getInt(5);
+				String nazwa = rs.getString(6);
+				String miejscowosc = rs.getString(7);
+				int rokZalozenia = rs.getInt(8);
+				String nazwaRektora = rs.getString(9);
+				list.add(new InnerJoin(id, imie, nazwisko, wiek, rokStudiow, nazwa, miejscowosc, rokZalozenia,
+						nazwaRektora));
+
+			}
+
+			return list;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		
+		
+	}
+	public static List<String> selectImieStudent() {
+		String selectNameStudent = "select imie from Student";
+		List<String> list = new ArrayList<>();
+		try {
+			ResultSet rs = stat.executeQuery(selectNameStudent);
+			while (rs.next()) {
+				String imie = rs.getString(1);
+				
+				list.add(imie);
+			}
+			return list;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static List<String> selectNazwiskoStudent() {
+		String selectSurnameStudent = "select nazwisko from Student";
+		List<String> list = new ArrayList<>();
+		try {
+			ResultSet rs = stat.executeQuery(selectSurnameStudent);
+			while (rs.next()) {
+				String nazwisko = rs.getString(1);
+				
+				list.add(nazwisko);
+			}
+			return list;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static List<String> selectMiejscowoscUczelnia() {
+		String selectMiejscowoscStudent = "select miejscowosc from Uczelnia";
+		List<String> list = new ArrayList<>();
+		try {
+			ResultSet rs = stat.executeQuery(selectMiejscowoscStudent);
+			while (rs.next()) {
+				String miejscowosc = rs.getString(1);
+				
+				list.add(miejscowosc);
+			}
+			return list;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static List<String> selectNazwaUczelnia() {
+		String selectNazwaUczelnia = "select nazwa from Uczelnia";
+		List<String> list = new ArrayList<>();
+		try {
+			ResultSet rs = stat.executeQuery(selectNazwaUczelnia);
+			while (rs.next()) {
+				String nazwa= rs.getString(1);
+				
+				list.add(nazwa);
+			}
+			return list;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static List<String> selectNazwaRektoraUczelnia() {
+		String selectNazwaRektoraUczelnia = "select nazwaRektora from Uczelnia";
+		List<String> list = new ArrayList<>();
+		try {
+			ResultSet rs = stat.executeQuery(selectNazwaRektoraUczelnia);
+			while (rs.next()) {
+				String nazwaRektora= rs.getString(1);
+				
+				list.add(nazwaRektora);
+			}
+			return list;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	
+	//String nazwisko = tfSurnameTop.getText();
+	//int wiekOd = Integer.parseInt((String)cbAgeFromBottom.getSelectedItem());
+	//int wiekDo = Integer.parseInt((String)cbAgeToBottom.getSelectedItem());
+	//int rokStudiowOd = Integer.parseInt((String)cbStudiesFromBottom.getSelectedItem());
+	//int rokStudiowDo = Integer.parseInt((String)cbStudiesToBottom.getSelectedItem());
+	//String nazwa = tfNazwaTop.getText();
+	//String miejscowosc = tfMiejscowoscTop.getText();
+	//int rokZalozeniaOd = Integer.parseInt((String)cbRokZalozeniaFromBottom.getSelectedItem());
+	//int rokZalozeniaDo = Integer.parseInt((String)cbRokZalozeniaToBottom.getSelectedItem());
+	//String nazwaRektora = tfNazwaRektoraTop.getText();
+	
+	public static List<String> selectAll(String imie, String nazwisko, int wiekOd, int wiekDo, int rokStudiowOd, int rokStudiowDo
+			, String nazwa, String miejscowosc, int rokZalozeniaOd, int rokZalozeniaDo, String nazwaRektora) {
+		String selectAll = "select imie from Student";
+		List<String> list = new ArrayList<>();
+		
+		String s = "SELECT * FROM INNER JOIN WHERE name = ";
+		s += imie + ", ";
+
+		
+		try {
+			ResultSet rs = stat.executeQuery(selectAll);
+			while (rs.next()) {
+				//String imie = rs.getString(1);
+				
+				list.add(imie);
+			}
+			return list;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 }
+
+//wszystkie listy porob dla nich metody z bazy danych
+//powalcz z formatowaniem okienek - sprobuj caly panel wrzucic w scroll pane / bar
