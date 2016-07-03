@@ -1,7 +1,6 @@
 package pawlak.witold.classes;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Uczelnia {
@@ -118,16 +117,12 @@ public class Uczelnia {
 		}
 		return idList;
 	}
-	
-	public static List<String> getRokZalozeniaListFromUczelniaList(List<Uczelnia> lista) {
-		List<String> rokZalozeniaList = new ArrayList<>();
-		for (Uczelnia u : lista) {
-			rokZalozeniaList.add(u.getRokZalozenia()+"");
-		}
-		Collections.sort(rokZalozeniaList);
-		return rokZalozeniaList;
-	}
 
 	
 }
 
+// do logowania
+// user - varchar
+// password - varchar
+// role - varchar
+// do tego crud

@@ -1,7 +1,6 @@
 package pawlak.witold.panels;
 
 import java.awt.BorderLayout;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -77,27 +76,11 @@ public class PanelAll extends JPanel implements ActionListener {
 	private JTextField tfNazwaRektoraBottom;
 
 	private JButton btnInsertBottom;
-
+	
 	private List<Wpis> listaW;
 	private List<Student> listaS;
 	private List<Uczelnia> listaU;
 	private int idx;
-
-	public CustomComboBoxModel getCbModelStudentBottom() {
-		return cbModelStudentBottom;
-	}
-
-	public void setCbModelStudentBottom(CustomComboBoxModel cbModelStudentBottom) {
-		this.cbModelStudentBottom = cbModelStudentBottom;
-	}
-
-	public CustomComboBoxModel getCbModelUczelniaBottom() {
-		return cbModelUczelniaBottom;
-	}
-
-	public void setCbModelUczelniaBottom(CustomComboBoxModel cbModelUczelniaBottom) {
-		this.cbModelUczelniaBottom = cbModelUczelniaBottom;
-	}
 
 	public PanelAll() {
 		super(new GridLayout(2, 1, 5, 5));
@@ -154,7 +137,7 @@ public class PanelAll extends JPanel implements ActionListener {
 		tfWiekBottom = new JTextField(10);
 		labRokStudiowBottom = new JLabel("ROK STUDIOW");
 		tfRokStudiowBottom = new JTextField(10);
-
+		
 		labIdUczelniaBottom = new JLabel("ID UCZELNIA");
 		cbModelUczelniaBottom = new CustomComboBoxModel(Uczelnia.getIdListFromUczelniaList(Database.selectUczelnia()));
 		cbIdUczelniaBottom = new JComboBox<>(cbModelUczelniaBottom);
@@ -170,11 +153,11 @@ public class PanelAll extends JPanel implements ActionListener {
 
 		btnInsertBottom = new JButton("INSERT");
 		btnInsertBottom.addActionListener(this);
-
+		
 		panelTop_Top.add(btnLeft);
 		panelTop_Top.add(tfIndex);
 		panelTop_Top.add(btnRight);
-
+		
 		panelTop_Center.add(labIdStudentTop);
 		panelTop_Center.add(tfIdStudentTop);
 		panelTop_Center.add(labIdUczelniaTop);
@@ -195,15 +178,15 @@ public class PanelAll extends JPanel implements ActionListener {
 		panelTop_Center.add(tfRokStudiowTop);
 		panelTop_Center.add(labNazwaRektoraTop);
 		panelTop_Center.add(tfNazwaRektoraTop);
-
+		
 		panelTop_Bottom.add(btnDeleteTop);
-
+		
 		panelTop.add(panelTop_Top, BorderLayout.PAGE_START);
 		panelTop.add(panelTop_Center, BorderLayout.CENTER);
 		panelTop.add(panelTop_Bottom, BorderLayout.PAGE_END);
-
+		
 		add(panelTop);
-
+		
 		panelBottom_Top.add(labIdStudentBottom);
 		panelBottom_Top.add(cbIdStudentBottom);
 		panelBottom_Top.add(labIdUczelniaBottom);
@@ -224,80 +207,67 @@ public class PanelAll extends JPanel implements ActionListener {
 		panelBottom_Top.add(tfRokStudiowBottom);
 		panelBottom_Top.add(labNazwaRektoraBottom);
 		panelBottom_Top.add(tfNazwaRektoraBottom);
-
+		
 		panelBottom_Bottom.add(btnInsertBottom);
-
+		
 		panelBottom.add(panelBottom_Top, BorderLayout.CENTER);
 		panelBottom.add(panelBottom_Bottom, BorderLayout.PAGE_END);
-
+		
 		add(panelBottom);
-
+		
 		setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-
-		idx = 0;
-
-		fillPanelWpisTop();
-
-	}
-
-	// TESTY
-	public void fillPanelWpisTop() {
+		
 		listaW = Database.selectWpis();
+		idx=0;
+		
+		//TESTY - UPDATE COMBOBOXA
+		//((CustomComboBoxModel)list).updateList(Database.selectStudent());
+		fillPanelWpisTop();
+		
+	}
+	
+	//TESTY
+	public void fillPanelWpisTop(){
+		listaW = Database.selectWpis();
+		tfIndex.setText(listaW.get(idx).getId()+"");
+		tfIdStudentTop.setText(listaW.get(idx).getIdStudent()+"");
+		tfIdUczelniaTop.setText(listaW.get(idx).getIdUczelnia()+"");
+		
+		int idStud = listaW.get(idx).getIdStudent()-1;
+		int idUczel = listaW.get(idx).getIdUczelnia()-1;
+		
 		listaS = Database.selectStudent();
-		listaU = Database.selectUczelnia();
-
-		tfIndex.setText(listaW.get(idx).getId() + "");
-		tfIdStudentTop.setText(listaW.get(idx).getIdStudent() + "");
-		tfIdUczelniaTop.setText(listaW.get(idx).getIdUczelnia() + "");
-
-		int helpIdStud = listaW.get(idx).getIdStudent();
-		int idStud = 0;
-		for (int i = 0; i < listaS.size(); i++) {
-			if (helpIdStud == listaS.get(i).getId()) {
-				idStud = i;
-				break;
-			}
-		}
-
-		int helpIdUczel = listaW.get(idx).getIdUczelnia();
-		int idUczel = 0;
-		for (int i = 0; i < listaU.size(); i++) {
-			if (helpIdUczel == listaU.get(i).getId()) {
-				idUczel = i;
-				break;
-			}
-		}
-
+		
 		tfImieTop.setText(listaS.get(idStud).getImie());
 		tfNazwiskoTop.setText(listaS.get(idStud).getNazwisko());
-		tfWiekTop.setText(listaS.get(idStud).getWiek() + "");
-		tfRokStudiowTop.setText(listaS.get(idStud).getRokStudiow() + "");
-
+		tfWiekTop.setText(listaS.get(idStud).getWiek()+"");
+		tfRokStudiowTop.setText(listaS.get(idStud).getRokStudiow()+"");
+		
+		listaU = Database.selectUczelnia();
 		tfNazwaTop.setText(listaU.get(idUczel).getNazwa());
 		tfMiejscowoscTop.setText(listaU.get(idUczel).getMiejscowosc());
-		tfRokZalozeniaTop.setText(listaU.get(idUczel).getRokZalozenia() + "");
+		tfRokZalozeniaTop.setText(listaU.get(idUczel).getRokZalozenia()+"");
 		tfNazwaRektoraTop.setText(listaU.get(idUczel).getNazwaRektora());
-
+		
 	}
-
-	// DZIA£A
-	public void fillPanelS(int idStudent) {
+	
+	//DZIA£A
+	public void fillPanelS(int idStudent){
 		listaS = Database.selectStudent();
 		tfImieBottom.setText(listaS.get(idStudent).getImie());
 		tfNazwiskoBottom.setText(listaS.get(idStudent).getNazwisko());
-		tfWiekBottom.setText(listaS.get(idStudent).getWiek() + "");
-		tfRokStudiowBottom.setText(listaS.get(idStudent).getRokStudiow() + "");
-
+		tfWiekBottom.setText(listaS.get(idStudent).getWiek()+"");
+		tfRokStudiowBottom.setText(listaS.get(idStudent).getRokStudiow()+"");
+		
 	}
-
-	// DZIA£A
-	public void fillPanelU(int idUczelnia) {
+	//DZIA£A
+	public void fillPanelU(int idUczelnia){
 		listaU = Database.selectUczelnia();
 		tfNazwaBottom.setText(listaU.get(idUczelnia).getNazwa());
 		tfMiejscowoscBottom.setText(listaU.get(idUczelnia).getMiejscowosc());
-		tfRokZalozeniaBottom.setText(listaU.get(idUczelnia).getRokZalozenia() + "");
+		tfRokZalozeniaBottom.setText(listaU.get(idUczelnia).getRokZalozenia()+"");
 		tfNazwaRektoraBottom.setText(listaU.get(idUczelnia).getNazwaRektora());
-
+		
 	}
 
 	@Override
@@ -305,116 +275,44 @@ public class PanelAll extends JPanel implements ActionListener {
 		if (e.getSource() == btnLeft) {
 			listaW = Database.selectWpis();
 			idx--;
-			if (idx < 0) {
-				idx = listaW.size() - 1;
+			if(idx<=0){
+				idx = listaW.size()-1;
 			}
 			fillPanelWpisTop();
-
+			
 		} else if (e.getSource() == btnRight) {
 			listaW = Database.selectWpis();
 			idx++;
-			if (idx >= listaW.size()) {
+			if(idx>=listaW.size()){
 				idx = 0;
 			}
 			fillPanelWpisTop();
-
+			
 		} else if (e.getSource() == btnDeleteTop) {
 			Database.deleteWpis(listaW.get(idx).getId());
 			idx = 0;
 			listaW = Database.selectWpis();
-
+			
+			
 		} else if (e.getSource() == btnInsertBottom) {
-			int idStudent = Integer.parseInt((String) cbIdStudentBottom.getSelectedItem());
-			int idUczelnia = Integer.parseInt((String) cbIdUczelniaBottom.getSelectedItem());
+			int idStudent = Integer.parseInt((String)cbIdStudentBottom.getSelectedItem());
+			int idUczelnia = Integer.parseInt((String)cbIdUczelniaBottom.getSelectedItem());
 			Database.insertWpis(idStudent, idUczelnia);
 			JOptionPane.showMessageDialog(null, "Wpis zosta³ zachowany!");
-		} else if (e.getSource() == cbIdStudentBottom) {
-
-			int idS = Integer.parseInt((String) cbIdStudentBottom.getSelectedItem());
-			listaS = Database.selectStudent();
-
-			for (int i = 0; i < listaS.size(); i++) {
-				if (idS == listaS.get(i).getId()) {
-					fillPanelS(i);
-				}
-			}
-
-		} else if (e.getSource() == cbIdUczelniaBottom) {
-
-			int idU = Integer.parseInt((String) cbIdUczelniaBottom.getSelectedItem());
-			listaU = Database.selectUczelnia();
-
-			for (int i = 0; i < listaU.size(); i++) {
-				if (idU == listaU.get(i).getId()) {
-					fillPanelU(i);
-				}
-			}
-
 		}
-
-	}
-
-	public void updateFont(int newFontSize) {
-		Font newFont = new Font("Times New Roman", Font.PLAIN, newFontSize);
-		btnLeft.setFont(newFont);
-		btnLeft.setFont(newFont);
-		btnRight.setFont(newFont);
-		btnRight.setFont(newFont);
-		tfIndex.setFont(newFont);
-
-		labIdStudentTop.setFont(newFont);
-		tfIdStudentTop.setFont(newFont);
-		labImieTop.setFont(newFont);
-		tfImieTop.setFont(newFont);
-		labNazwiskoTop.setFont(newFont);
-		tfNazwiskoTop.setFont(newFont);
-		labWiekTop.setFont(newFont);
-		tfWiekTop.setFont(newFont);
-		labRokStudiowTop.setFont(newFont);
-		tfRokStudiowTop.setFont(newFont);
-
-		labIdUczelniaTop.setFont(newFont);
-		tfIdUczelniaTop.setFont(newFont);
-		labNazwaTop.setFont(newFont);
-		tfNazwaTop.setFont(newFont);
-		labMiejscowoscTop.setFont(newFont);
-		tfMiejscowoscTop.setFont(newFont);
-		labRokZalozeniaTop.setFont(newFont);
-		tfRokZalozeniaTop.setFont(newFont);
-		labNazwaRektoraTop.setFont(newFont);
-		tfNazwaRektoraTop.setFont(newFont);
-
-		btnDeleteTop.setFont(newFont);
-		btnDeleteTop.setFont(newFont);
-
-		labIdStudentBottom.setFont(newFont);
-
-		cbIdStudentBottom.setFont(newFont);
-		cbIdStudentBottom.setFont(newFont);
-		labImieBottom.setFont(newFont);
-		tfImieBottom.setFont(newFont);
-		labNazwiskoBottom.setFont(newFont);
-		tfNazwiskoBottom.setFont(newFont);
-		labWiekBottom.setFont(newFont);
-		tfWiekBottom.setFont(newFont);
-		labRokStudiowBottom.setFont(newFont);
-		tfRokStudiowBottom.setFont(newFont);
-
-		labIdUczelniaBottom.setFont(newFont);
-
-		cbIdUczelniaBottom.setFont(newFont);
-		cbIdUczelniaBottom.setFont(newFont);
-		labNazwaBottom.setFont(newFont);
-		tfNazwaBottom.setFont(newFont);
-		labMiejscowoscBottom.setFont(newFont);
-		tfMiejscowoscBottom.setFont(newFont);
-		labRokZalozeniaBottom.setFont(newFont);
-		tfRokZalozeniaBottom.setFont(newFont);
-		labNazwaRektoraBottom.setFont(newFont);
-		tfNazwaRektoraBottom.setFont(newFont);
-
-		btnInsertBottom.setFont(newFont);
-		btnInsertBottom.setFont(newFont);
+		else if (e.getSource() == cbIdStudentBottom)
+		{
+			
+			int idS = Integer.parseInt((String)cbIdStudentBottom.getSelectedItem())-1;
+			fillPanelS(idS);
+			
+		}
+		else if (e.getSource() == cbIdUczelniaBottom)
+		{
+			int idU = Integer.parseInt((String)cbIdUczelniaBottom.getSelectedItem())-1;
+			fillPanelU(idU);
+			
+		}
 
 	}
 

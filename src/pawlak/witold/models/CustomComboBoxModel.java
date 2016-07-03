@@ -8,19 +8,16 @@ import javax.swing.ComboBoxModel;
 
 import pawlak.witold.database.Database;
 
-public class CustomComboBoxModel extends AbstractListModel<String> implements ComboBoxModel<String> {
+public class CustomComboBoxModel extends AbstractListModel<String> implements ComboBoxModel<String>{
 
 	private List<String> list;
-	private String selectedItem; // zmienna przechowujaca aktualnie zaznaczony
-									// element w comboboxie
-
+	private String selectedItem; //zmienna przechowujaca aktualnie zaznaczony element w comboboxie
+	
 	public CustomComboBoxModel(List<String> list) {
-		// this.list = list; //dwie referencje - jedna lista, szybko bez
-		// kopiowania, mozliwosc niemyslnej modyfikacji
-		this.list = new ArrayList<>(list); // dwie listy dwie referencje,
-											// kopiowanie
+		//this.list = list; //dwie referencje - jedna lista, szybko bez kopiowania, mozliwosc niemyslnej modyfikacji
+		this.list = new ArrayList<>(list); //dwie listy dwie referencje, kopiowanie
 	}
-
+	
 	@Override
 	public String getElementAt(int idx) {
 		return list.get(idx);
@@ -38,17 +35,16 @@ public class CustomComboBoxModel extends AbstractListModel<String> implements Co
 
 	@Override
 	public void setSelectedItem(Object anItem) {
-		selectedItem = (String) anItem;
-
+		selectedItem = (String)anItem;
+		
 	}
 	
-	
-
-	public void updateList(List<String> list) {
-		// this.list = list; //dwie referencje - jedna lista, szybko bez
-		// kopiowania, mozliwosc niemyslnej modyfikacji
-		this.list = new ArrayList<>(list); // dwie listy dwie referencje,
-											// kopiowanie
+	public void updateList(List<String> list)
+	{
+		//this.list = list; //dwie referencje - jedna lista, szybko bez kopiowania, mozliwosc niemyslnej modyfikacji
+		this.list = new ArrayList<>(list); //dwie listy dwie referencje, kopiowanie
 	}
 
 }
+//za ka¿dym wejsciem do PaneluAll odœwie¿anie Comboboxa
+//trzeba dorobic update oraz delete do tabeli wpis // OK

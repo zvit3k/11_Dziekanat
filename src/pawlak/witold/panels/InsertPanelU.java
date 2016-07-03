@@ -1,7 +1,6 @@
 package pawlak.witold.panels;
 
 import java.awt.BorderLayout;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,7 +13,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import pawlak.witold.classes.Settings;
 import pawlak.witold.database.Database;
 
 public class InsertPanelU extends JPanel implements ActionListener {
@@ -69,7 +67,7 @@ public class InsertPanelU extends JPanel implements ActionListener {
 		add(panelBottom, BorderLayout.PAGE_END);
 
 		setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-		updateFont(Settings.fontSize);
+		
 	}
 
 	@Override
@@ -85,20 +83,6 @@ public class InsertPanelU extends JPanel implements ActionListener {
 			((JFrame) this.getRootPane().getParent()).dispose();
 		}
 
-	}
-	
-	public void updateFont(int newFontSize){
-		labNazwa.setFont(new Font("Times New Roman", Font.PLAIN, newFontSize));
-		tfNazwa.setFont(new Font("Times New Roman", Font.PLAIN, newFontSize));
-		labMiejscowosc.setFont(new Font("Times New Roman", Font.PLAIN, newFontSize));
-		tfMiejscowosc.setFont(new Font("Times New Roman", Font.PLAIN, newFontSize));
-		labRokZalozenia.setFont(new Font("Times New Roman", Font.PLAIN, newFontSize));
-		tfRokZalozenia.setFont(new Font("Times New Roman", Font.PLAIN, newFontSize));
-		labNazwaRektora.setFont(new Font("Times New Roman", Font.PLAIN, newFontSize));
-		tfNazwaRektora.setFont(new Font("Times New Roman", Font.PLAIN, newFontSize));
-	
-		btnInsert.setFont(new Font("Times New Roman", Font.PLAIN, newFontSize));
-		btnCancel.setFont(new Font("Times New Roman", Font.PLAIN, newFontSize));
 	}
 
 }
